@@ -1,0 +1,161 @@
+openapi: 3.1.0
+info:
+  title: Fleet Management API
+  description: Provides tools to optimize vessel operations, monitor telemetry, and perform predictive maintenance for interstellar fleets.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/fleet-management
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/fleet-management
+    description: Staging server
+paths:
+  /vessels/{vesselId}/telemetry:
+    get:
+      summary: Retrieve vessel telemetry data
+      description: Returns real-time telemetry data for a specified vessel, including key metrics like speed, fuel levels, and system status.
+      parameters:
+        - name: vesselId
+          in: path
+          required: true
+          description: The unique identifier of the vessel.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Telemetry data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vesselId:
+                    type: string
+                    description: The unique identifier of the vessel.
+                  telemetry:
+                    type: object
+                    properties:
+                      speed:
+                        type: number
+                        description: Current speed of the vessel in km/s.
+                      fuelLevel:
+                        type: number
+                        description: Current fuel level as a percentage.
+                      systemStatus:
+                        type: string
+                        description: Overall status of the vessel's systems.
+                      coordinates:
+                        type: object
+                        properties:
+                          x:
+                            type: number
+                          y:
+                            type: number
+                        description: Current position of the vessel.
+        '404':
+          description: Vessel not found.
+        '400':
+          description: Invalid vessel ID.
+  /vessels/{vesselId}/maintenance:
+    post:
+      summary: Schedule predictive maintenance
+      description: Schedules maintenance based on real-time telemetry analysis and predictive algorithms.
+      parameters:
+        - name: vesselId
+          in: path
+          required: true
+          description: The unique identifier of the vessel.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maintenanceType:
+                  type: string
+                  description: Type of maintenance to schedule (e.g., engine, life support, power systems).
+                scheduledDate:
+                  type: string
+                  format: date-time
+                  description: The proposed date and time for maintenance.
+              required:
+                - maintenanceType
+                - scheduledDate
+      responses:
+        '201':
+          description: Maintenance scheduled successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vesselId:
+                    type: string
+                    description: The unique identifier of the vessel.
+                  maintenanceId:
+                    type: string
+                    description: Unique identifier for the scheduled maintenance.
+                  scheduledDate:
+                    type: string
+                    format: date-time
+                    description: The scheduled date and time for maintenance.
+        '400':
+          description: Invalid request data.
+        '404':
+          description: Vessel not found.
+  /fleet/summary:
+    get:
+      summary: Retrieve fleet summary
+      description: Provides an aggregated summary of all vessels in the fleet, including statuses, maintenance needs, and performance metrics.
+      responses:
+        '200':
+          description: Fleet summary retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalVessels:
+                    type: integer
+                    description: Total number of vessels in the fleet.
+                  activeVessels:
+                    type: integer
+                    description: Number of vessels currently active.
+                  maintenanceRequired:
+                    type: integer
+                    description: Number of vessels requiring immediate maintenance.
+                  averageFuelLevel:
+                    type: number
+                    description: Average fuel level across the fleet as a percentage.
+                  fleetStatus:
+                    type: string
+                    description: Overall status of the fleet.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Fleet Management
+    description: Endpoints for monitoring, optimizing, and maintaining interstellar fleets.
+

@@ -1,0 +1,197 @@
+openapi: 3.1.0
+info:
+  title: Cargo Tracking API
+  description: Provides real-time tracking, status updates, and predictive delivery estimates for interstellar cargo shipments.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/cargo-tracking
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/cargo-tracking
+    description: Staging server
+paths:
+  /shipments/{shipmentId}:
+    get:
+      summary: Retrieve shipment details
+      description: Provides detailed information about a specific shipment, including current status and location.
+      parameters:
+        - name: shipmentId
+          in: path
+          required: true
+          description: The unique identifier for the shipment.
+          schema:
+            type: string
+        - name: includeHistory
+          in: query
+          required: false
+          description: Whether to include the shipment's tracking history.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Shipment details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shipmentId:
+                    type: string
+                    description: Unique identifier for the shipment.
+                  status:
+                    type: string
+                    description: Current status of the shipment.
+                  location:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        description: The star system where the shipment is located.
+                      coordinates:
+                        type: object
+                        properties:
+                          x:
+                            type: number
+                            description: X-coordinate of the shipment's location.
+                          y:
+                            type: number
+                            description: Y-coordinate of the shipment's location.
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                          description: Time of the status update.
+                        status:
+                          type: string
+                          description: Status at the given time.
+                        location:
+                          type: string
+                          description: Location at the given time.
+        '404':
+          description: Shipment not found.
+        '400':
+          description: Invalid shipment ID.
+  /shipments:
+    post:
+      summary: Register a new shipment
+      description: Registers a new shipment in the cargo tracking system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origin:
+                  type: string
+                  description: The origin location of the shipment.
+                destination:
+                  type: string
+                  description: The destination location of the shipment.
+                cargoDetails:
+                  type: object
+                  properties:
+                    weight:
+                      type: number
+                      description: Weight of the shipment in kilograms.
+                    hazmat:
+                      type: boolean
+                      description: Indicates if the cargo contains hazardous materials.
+                    temperatureSensitive:
+                      type: boolean
+                      description: Indicates if the cargo requires temperature control.
+              required:
+                - origin
+                - destination
+                - cargoDetails
+      responses:
+        '201':
+          description: Shipment registered successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shipmentId:
+                    type: string
+                    description: Unique identifier for the registered shipment.
+                  estimatedDelivery:
+                    type: string
+                    format: date-time
+                    description: Predicted delivery date and time.
+        '400':
+          description: Invalid request body.
+  /shipments/{shipmentId}/status:
+    patch:
+      summary: Update shipment status
+      description: Updates the status of an existing shipment.
+      parameters:
+        - name: shipmentId
+          in: path
+          required: true
+          description: The unique identifier for the shipment.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: New status for the shipment.
+                location:
+                  type: object
+                  properties:
+                    system:
+                      type: string
+                      description: The star system where the shipment is now located.
+                    coordinates:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                        y:
+                          type: number
+              required:
+                - status
+      responses:
+        '200':
+          description: Shipment status updated successfully.
+        '400':
+          description: Invalid request parameters.
+        '404':
+          description: Shipment not found.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Cargo Tracking
+    description: Endpoints for managing and monitoring cargo shipments.
+

@@ -1,0 +1,149 @@
+openapi: 3.1.0
+info:
+  title: Demographics API
+  description: Provides detailed insights into colonial population dynamics, workforce capabilities, and health statistics.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/demographics
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/demographics
+    description: Staging server
+paths:
+  /colonies/{colonyId}/population:
+    get:
+      summary: Retrieve population statistics
+      description: Returns population data for a specified colony, including population size, age distribution, and workforce status.
+      parameters:
+        - name: colonyId
+          in: path
+          required: true
+          description: The unique identifier for the colony.
+          schema:
+            type: string
+        - name: includeHealthStats
+          in: query
+          required: false
+          description: Whether to include health statistics in the response.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Population statistics retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colonyId:
+                    type: string
+                    description: The unique identifier for the colony.
+                  populationSize:
+                    type: integer
+                    description: Total population of the colony.
+                  ageDistribution:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                    description: Age distribution of the population.
+                  workforceStatus:
+                    type: object
+                    properties:
+                      employed:
+                        type: integer
+                        description: Number of employed individuals.
+                      unemployed:
+                        type: integer
+                        description: Number of unemployed individuals.
+                  healthStats:
+                    type: object
+                    nullable: true
+                    description: Health statistics, if requested.
+                    properties:
+                      averageHealthIndex:
+                        type: number
+                        description: Average health index of the population.
+                      topConditions:
+                        type: array
+                        items:
+                          type: string
+                        description: Most common health conditions in the colony.
+        '404':
+          description: Colony not found.
+        '400':
+          description: Invalid colony ID.
+  /colonies/{colonyId}/workforce:
+    get:
+      summary: Retrieve workforce capabilities
+      description: Returns workforce data for a specified colony, including skills mapping and training program recommendations.
+      parameters:
+        - name: colonyId
+          in: path
+          required: true
+          description: The unique identifier for the colony.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workforce data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colonyId:
+                    type: string
+                    description: The unique identifier for the colony.
+                  totalWorkforce:
+                    type: integer
+                    description: Total number of workforce participants.
+                  skillsMapping:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                      description: Number of individuals with a specific skill.
+                  trainingRecommendations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        programName:
+                          type: string
+                          description: Name of the training program.
+                        targetSkill:
+                          type: string
+                          description: The skill targeted by the program.
+                        participantsRequired:
+                          type: integer
+                          description: Recommended number of participants.
+        '404':
+          description: Colony not found.
+        '400':
+          description: Invalid colony ID.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Demographics
+    description: Endpoints for monitoring and analyzing colonial population and workforce data.
+

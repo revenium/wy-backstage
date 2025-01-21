@@ -1,0 +1,178 @@
+openapi: 3.1.0
+info:
+  title: Research Platform API
+  description: Enables secure collaboration and access to Weyland-Yutani’s centralized research platform, facilitating data sharing, validation of protocols, and compliance with biosafety standards.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/research-platform
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/research-platform
+    description: Staging server
+paths:
+  /research/papers:
+    get:
+      summary: Retrieve research papers
+      description: Provides access to peer-reviewed publications available in the research platform.
+      parameters:
+        - name: topic
+          in: query
+          required: false
+          description: Filter research papers by topic or keyword.
+          schema:
+            type: string
+        - name: author
+          in: query
+          required: false
+          description: Filter research papers by author name.
+          schema:
+            type: string
+        - name: year
+          in: query
+          required: false
+          description: Filter research papers by publication year.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Research papers retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  papers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          description: Title of the research paper.
+                        author:
+                          type: string
+                          description: Author(s) of the paper.
+                        abstract:
+                          type: string
+                          description: Abstract of the paper.
+                        publishedDate:
+                          type: string
+                          format: date
+                          description: Publication date of the paper.
+                        link:
+                          type: string
+                          description: URL to access the full paper.
+        '400':
+          description: Invalid query parameters.
+  /research/validate-protocol:
+    post:
+      summary: Validate research protocol
+      description: Validates an experimental protocol against Weyland-Yutani’s biosafety and compliance standards.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                protocolName:
+                  type: string
+                  description: Name of the protocol being validated.
+                steps:
+                  type: array
+                  items:
+                    type: string
+                  description: List of steps in the protocol.
+                biosafetyLevel:
+                  type: string
+                  enum: [BSL-1, BSL-2, BSL-3, BSL-4]
+                  description: Biosafety level required for the protocol.
+              required:
+                - protocolName
+                - steps
+                - biosafetyLevel
+      responses:
+        '200':
+          description: Protocol validated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  protocolName:
+                    type: string
+                    description: Name of the protocol.
+                  complianceStatus:
+                    type: string
+                    enum: [compliant, non-compliant]
+                    description: Compliance status of the protocol.
+                  issues:
+                    type: array
+                    items:
+                      type: string
+                    description: List of issues found during validation (if any).
+        '400':
+          description: Invalid protocol data.
+  /research/collaborators:
+    get:
+      summary: List collaborators
+      description: Retrieves a list of active collaborators on the research platform, including their expertise and associated projects.
+      parameters:
+        - name: expertise
+          in: query
+          required: false
+          description: Filter collaborators by expertise area.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Collaborators retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collaborators:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the collaborator.
+                        expertise:
+                          type: string
+                          description: Area of expertise.
+                        projects:
+                          type: array
+                          items:
+                            type: string
+                          description: List of associated research projects.
+        '400':
+          description: Invalid query parameters.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Research Platform
+    description: Endpoints for accessing research data, validating protocols, and managing collaboration.
+

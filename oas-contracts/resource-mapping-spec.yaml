@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: Resource Mapping API
+  description: Provides advanced geological survey capabilities and detailed mapping of planetary resources, including rare earth elements and habitability scoring.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/resource-mapping
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/resource-mapping
+    description: Staging server
+paths:
+  /planets/{planetId}/resources:
+    get:
+      summary: Retrieve planetary resource data
+      description: Returns a detailed map of resource deposits on a specified planet, including depth, concentration, and type of resources.
+      parameters:
+        - name: planetId
+          in: path
+          required: true
+          description: The unique identifier of the planet.
+          schema:
+            type: string
+        - name: resourceType
+          in: query
+          required: false
+          description: Filter results by specific resource type (e.g., minerals, xenominerals, water).
+          schema:
+            type: string
+        - name: depthRange
+          in: query
+          required: false
+          description: Filter results by depth range in kilometers (e.g., `0-3` for 0 to 3 km).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Planetary resource data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  planetId:
+                    type: string
+                    description: The unique identifier of the planet.
+                  resources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Type of resource (e.g., minerals, water, xenominerals).
+                        depth:
+                          type: number
+                          description: Depth of the resource deposit in kilometers.
+                        concentration:
+                          type: number
+                          description: Concentration of the resource in percentage.
+                        coordinates:
+                          type: object
+                          properties:
+                            x:
+                              type: number
+                            y:
+                              type: number
+                          description: Location of the resource deposit on the planet's surface.
+        '404':
+          description: Planet not found.
+        '400':
+          description: Invalid planet ID or query parameters.
+  /planets/{planetId}/habitability:
+    get:
+      summary: Retrieve habitability score
+      description: Returns a detailed habitability score and assessment for a specified planet, including environmental and resource metrics.
+      parameters:
+        - name: planetId
+          in: path
+          required: true
+          description: The unique identifier of the planet.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Habitability score retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  planetId:
+                    type: string
+                    description: The unique identifier of the planet.
+                  habitabilityScore:
+                    type: number
+                    description: Overall habitability score (0-100).
+                  environmentalFactors:
+                    type: object
+                    description: Detailed metrics affecting habitability.
+                    properties:
+                      atmosphere:
+                        type: string
+                        description: Atmospheric composition suitability for human habitation.
+                      temperature:
+                        type: number
+                        description: Average surface temperature in degrees Celsius.
+                      radiationLevel:
+                        type: string
+                        description: Radiation level suitability (e.g., low, moderate, high).
+                  resourceFactors:
+                    type: object
+                    description: Resource availability metrics.
+                    properties:
+                      waterAvailability:
+                        type: string
+                        description: Availability of water resources.
+                      energyResources:
+                        type: string
+                        description: Availability of energy resources (e.g., solar, geothermal).
+        '404':
+          description: Planet not found.
+  /planets/{planetId}/surveys:
+    post:
+      summary: Submit a geological survey request
+      description: Submits a new request for a geological survey to map planetary resources.
+      parameters:
+        - name: planetId
+          in: path
+          required: true
+          description: The unique identifier of the planet.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                surveyType:
+                  type: string
+                  enum: [surface, subsurface, deep-scan]
+                  description: Type of survey to be conducted.
+                priority:
+                  type: string
+                  enum: [low, medium, high]
+                  description: Priority of the survey request.
+                notes:
+                  type: string
+                  description: Additional notes or instructions for the survey team.
+              required:
+                - surveyType
+      responses:
+        '201':
+          description: Geological survey request submitted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  surveyId:
+                    type: string
+                    description: Unique identifier for the survey request.
+                  estimatedCompletion:
+                    type: string
+                    format: date-time
+                    description: Estimated completion date of the survey.
+        '400':
+          description: Invalid request data.
+        '404':
+          description: Planet not found.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Resource Mapping
+    description: Endpoints for geological surveys, resource mapping, and habitability scoring.
+

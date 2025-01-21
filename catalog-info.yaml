@@ -1,0 +1,128 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: weyland-yutani-apis
+  description: A collection of Weyland-Yutani API specifications for interstellar and colonial operations.
+  annotations:
+    backstage.io/managed-by-location: https://github.com/your-repo
+    backstage.io/catalog-info-url: https://github.com/your-repo/catalog-info.yaml
+  tags:
+    - weyland-yutani
+    - api
+spec:
+  type: library
+  owner: team-weyland-yutani
+  links:
+    - title: Documentation
+      url: https://weyland-yutani.com/docs
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: cargo-tracking-api
+  description: Provides tools for tracking interstellar cargo with real-time updates and predictive delivery estimates.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/cargo-tracking-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: research-management-api
+  description: Enables advanced resource utilization and planning for colonial operations.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/research-management-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: research-platform-api
+  description: Facilitates collaboration and validation of research protocols with compliance and biosafety verification.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/research-platform-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: fleet-management-api
+  description: Optimizes fleet operations with telemetry, predictive maintenance, and efficiency insights.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/fleet-management-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: navigation-api
+  description: Delivers advanced space navigation capabilities, including hazard avoidance and route optimization.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/navigation-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: atmospheric-analysis-api
+  description: Provides tools for monitoring atmospheric conditions and running terraforming simulations.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/atmospheric-analysis-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: resource-mapping-api
+  description: Offers geological survey tools and resource mapping for planetary operations.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/resource-mapping-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: demographics-api
+  description: Provides insights into colonial population dynamics, workforce capabilities, and health statistics.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/demographics-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: infrastructure-api
+  description: Monitors and manages critical colonial infrastructure systems like power and life support.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/infrastructure-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: specimen-database-api
+  description: Accesses Weyland-Yutani's xenobiological specimen database for detailed morphological, genetic, and behavioral data.
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: team-weyland-yutani
+  definition: ./oas-contracts/specimen-database-spec.yaml
+

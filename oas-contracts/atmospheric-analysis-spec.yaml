@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+  title: Atmospheric Analysis API
+  description: Provides real-time atmospheric composition monitoring and advanced simulation capabilities for terraforming operations.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/atmospheric-analysis
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/atmospheric-analysis
+    description: Staging server
+paths:
+  /composition:
+    get:
+      summary: Retrieve real-time atmospheric composition data
+      description: Provides the current atmospheric composition for a specified terraforming project.
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          description: The ID of the terraforming project.
+          schema:
+            type: string
+        - name: unit
+          in: query
+          required: false
+          description: The unit of measurement for the response data (e.g., percentage, ppm).
+          schema:
+            type: string
+            enum: [percentage, ppm]
+      responses:
+        '200':
+          description: Atmospheric composition data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                    description: The ID of the terraforming project.
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: Timestamp of the data retrieval.
+                  composition:
+                    type: object
+                    additionalProperties:
+                      type: number
+                      description: Concentration of the gas in the specified unit.
+                    description: Key-value pairs representing gases and their concentrations.
+        '400':
+          description: Invalid request parameters.
+        '404':
+          description: Terraforming project not found.
+  /simulation:
+    post:
+      summary: Run an atmospheric transformation simulation
+      description: Simulates atmospheric changes based on provided parameters and returns predicted outcomes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectId:
+                  type: string
+                  description: The ID of the terraforming project.
+                targetComposition:
+                  type: object
+                  additionalProperties:
+                    type: number
+                  description: Desired atmospheric composition (key-value pairs of gases and target concentrations).
+                duration:
+                  type: number
+                  description: Duration of the simulation in hours.
+                environmentalFactors:
+                  type: object
+                  additionalProperties:
+                    type: number
+                  description: Environmental factors impacting the simulation (e.g., temperature, radiation levels).
+              required:
+                - projectId
+                - targetComposition
+                - duration
+      responses:
+        '200':
+          description: Simulation completed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                    description: The ID of the terraforming project.
+                  targetComposition:
+                    type: object
+                    description: Desired atmospheric composition.
+                  predictedOutcome:
+                    type: object
+                    description: Predicted atmospheric conditions after the simulation.
+                  executionTime:
+                    type: number
+                    description: Time taken to complete the simulation in seconds.
+        '400':
+          description: Invalid request body.
+        '404':
+          description: Terraforming project not found.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error.
+        code:
+          type: integer
+          description: HTTP status code of the error.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Atmospheric Analysis
+    description: Endpoints for monitoring and simulating atmospheric conditions.
+

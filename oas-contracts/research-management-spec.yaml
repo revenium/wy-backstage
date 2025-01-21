@@ -1,0 +1,191 @@
+openapi: 3.1.0
+info:
+  title: Resource Management API
+  description: Provides real-time visibility into colonial resource utilization, supply chain operations, and automated resource optimization.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/resource-management
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/resource-management
+    description: Staging server
+paths:
+  /colonies/{colonyId}/resources:
+    get:
+      summary: Retrieve resource utilization data
+      description: Returns real-time data on resource consumption and availability for a specific colony.
+      parameters:
+        - name: colonyId
+          in: path
+          required: true
+          description: The unique identifier of the colony.
+          schema:
+            type: string
+        - name: resourceType
+          in: query
+          required: false
+          description: Filter results by a specific resource type (e.g., water, energy, food).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resource data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colonyId:
+                    type: string
+                    description: The unique identifier of the colony.
+                  resources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Type of resource (e.g., water, energy, food).
+                        available:
+                          type: number
+                          description: Amount of the resource currently available.
+                        consumed:
+                          type: number
+                          description: Amount of the resource consumed in the last reporting period.
+                        utilizationRate:
+                          type: number
+                          description: Percentage of resource utilization.
+        '404':
+          description: Colony not found.
+        '400':
+          description: Invalid colony ID or request parameters.
+  /colonies/{colonyId}/supply-orders:
+    post:
+      summary: Place a supply order
+      description: Creates a supply order for additional resources to support the colony.
+      parameters:
+        - name: colonyId
+          in: path
+          required: true
+          description: The unique identifier of the colony.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: Type of resource (e.g., water, energy, food).
+                      quantity:
+                        type: number
+                        description: Amount of the resource to order.
+                  description: List of resources to be ordered.
+                priority:
+                  type: string
+                  enum: [low, medium, high]
+                  description: Priority level of the supply order.
+              required:
+                - resources
+      responses:
+        '201':
+          description: Supply order created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: string
+                    description: Unique identifier for the supply order.
+                  estimatedDelivery:
+                    type: string
+                    format: date-time
+                    description: Estimated delivery date and time.
+        '400':
+          description: Invalid request data.
+        '404':
+          description: Colony not found.
+  /colonies/{colonyId}/forecasts:
+    get:
+      summary: Retrieve resource forecasts
+      description: Provides AI-driven predictions of resource needs based on historical data and current consumption trends.
+      parameters:
+        - name: colonyId
+          in: path
+          required: true
+          description: The unique identifier of the colony.
+          schema:
+            type: string
+        - name: forecastPeriod
+          in: query
+          required: false
+          description: Forecast period in days (default: 7).
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Resource forecasts retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colonyId:
+                    type: string
+                    description: The unique identifier of the colony.
+                  forecastPeriod:
+                    type: integer
+                    description: Period of the forecast in days.
+                  forecasts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Type of resource (e.g., water, energy, food).
+                        predictedUsage:
+                          type: number
+                          description: Predicted usage of the resource over the forecast period.
+                        predictedShortage:
+                          type: boolean
+                          description: Indicates if a shortage is predicted.
+        '404':
+          description: Colony not found.
+        '400':
+          description: Invalid query parameters or colony ID.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Resource Management
+    description: Endpoints for monitoring and optimizing colonial resource usage and supply chain operations.
+

@@ -1,0 +1,205 @@
+openapi: 3.1.0
+info:
+  title: Specimen Database API
+  description: Provides access to Weyland-Yutani's extensive database of documented xenobiological specimens, including morphological, genetic, and behavioral data.
+  version: 1.0.0
+  contact:
+    name: Weyland-Yutani Support
+    url: https://weyland-yutani.com/support
+    email: support@weyland-yutani.com
+  termsOfService: https://weyland-yutani.com/terms
+servers:
+  - url: https://api.weyland-yutani.com/specimen-database
+    description: Production server
+  - url: https://staging.api.weyland-yutani.com/specimen-database
+    description: Staging server
+paths:
+  /specimens:
+    get:
+      summary: List specimens
+      description: Retrieves a list of documented specimens, optionally filtered by classification or habitat.
+      parameters:
+        - name: classification
+          in: query
+          required: false
+          description: Filter specimens by taxonomic classification.
+          schema:
+            type: string
+        - name: habitat
+          in: query
+          required: false
+          description: Filter specimens by their known habitat type.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of specimens to return (default: 50).
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          required: false
+          description: The starting point for the result set (default: 0).
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Specimen list retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: Total number of matching specimens.
+                  specimens:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the specimen.
+                        name:
+                          type: string
+                          description: Common name of the specimen.
+                        classification:
+                          type: string
+                          description: Taxonomic classification of the specimen.
+                        habitat:
+                          type: string
+                          description: Known habitat type of the specimen.
+        '400':
+          description: Invalid query parameters.
+  /specimens/{specimenId}:
+    get:
+      summary: Retrieve specimen details
+      description: Provides detailed information about a specific specimen, including morphology, genetics, behavior, and ecological interactions.
+      parameters:
+        - name: specimenId
+          in: path
+          required: true
+          description: The unique identifier for the specimen.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Specimen details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the specimen.
+                  name:
+                    type: string
+                    description: Common name of the specimen.
+                  classification:
+                    type: string
+                    description: Taxonomic classification of the specimen.
+                  morphology:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        description: Summary of the specimen's physical characteristics.
+                      size:
+                        type: object
+                        properties:
+                          length:
+                            type: number
+                            description: Average length of the specimen in meters.
+                          weight:
+                            type: number
+                            description: Average weight of the specimen in kilograms.
+                  genetics:
+                    type: object
+                    properties:
+                      genomeSequence:
+                        type: string
+                        description: Genetic sequence of the specimen (truncated).
+                  behavior:
+                    type: string
+                    description: Behavioral traits and observations.
+                  ecologicalInteractions:
+                    type: array
+                    items:
+                      type: string
+                    description: Known ecological interactions.
+        '404':
+          description: Specimen not found.
+        '400':
+          description: Invalid specimen ID.
+  /specimens/{specimenId}/related:
+    get:
+      summary: Retrieve related specimens
+      description: Returns a list of specimens genetically or ecologically related to the specified specimen.
+      parameters:
+        - name: specimenId
+          in: path
+          required: true
+          description: The unique identifier for the specimen.
+          schema:
+            type: string
+        - name: relationType
+          in: query
+          required: false
+          description: Type of relationship to filter by (e.g., genetic, ecological).
+          schema:
+            type: string
+            enum: [genetic, ecological]
+      responses:
+        '200':
+          description: Related specimens retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  specimenId:
+                    type: string
+                    description: The unique identifier of the queried specimen.
+                  relatedSpecimens:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier of the related specimen.
+                        name:
+                          type: string
+                          description: Common name of the related specimen.
+                        relationType:
+                          type: string
+                          description: Type of relationship (e.g., genetic, ecological).
+        '404':
+          description: Specimen not found.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Specimen Database
+    description: Endpoints for accessing xenobiological specimen data and related information.
+
