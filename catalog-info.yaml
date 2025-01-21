@@ -11,7 +11,7 @@ metadata:
     - api
 spec:
   type: library
-  owner: team-weyland-yutani
+  owner: guests
   links:
     - title: Documentation
       url: https://weyland-yutani.com/docs
@@ -24,7 +24,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/cargo-tracking-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -35,7 +35,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/research-management-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -46,7 +46,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/research-platform-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -57,7 +57,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/fleet-management-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -68,7 +68,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/navigation-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -79,7 +79,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/atmospheric-analysis-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -90,7 +90,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/resource-mapping-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -101,7 +101,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/demographics-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -112,7 +112,7 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/infrastructure-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
@@ -123,6 +123,6 @@ metadata:
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-weyland-yutani
+  owner: guests
   definition: ./oas-contracts/specimen-database-spec.yaml
 
