@@ -26,7 +26,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/cargo-tracking-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/cargo-tracking-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -37,7 +38,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/research-management-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/research-management-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -48,7 +50,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/research-platform-spec.yaml
+  definition:
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/research-platform-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -59,7 +62,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/fleet-management-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/fleet-management-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -70,7 +74,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/navigation-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/navigation-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -81,7 +86,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/atmospheric-analysis-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/atmospheric-analysis-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -92,7 +98,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/resource-mapping-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/resource-mapping-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -103,7 +110,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/demographics-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/demographics-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -114,7 +122,8 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/infrastructure-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/infrastructure-spec.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -125,5 +134,6 @@ spec:
   type: openapi
   lifecycle: experimental
   owner: guests
-  definition: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/specimen-database-spec.yaml
+  definition: 
+    $openapi: https://raw.githubusercontent.com/revenium/wy-backstage/refs/heads/main/oas-contracts/specimen-database-spec.yaml
 
